@@ -1,15 +1,11 @@
 export function Button(props) {
-    if(props.icon) {
-        return (
-            <button type="button" class="py-2 px-4 flex justify-center items-center  bg-red-600 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
-                {props.icon && <img src={props.icon} alt="icon" style={{"fill": "rgb(244,244,244)"}} height="20px"></img>}
-            </button>
-        );
-    }
-
     return (
-        <button type="button" class="py-2 px-4 flex justify-center items-center  bg-red-600 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
-            {props.text}
-        </button>
+        <div class="mt-8 place-self-end">
+            <button class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform 
+                        bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+                    onClick={x => props.onClick(x)}>
+                {props.text}
+            </button>
+        </div>
     );
 }
