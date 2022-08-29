@@ -18,8 +18,9 @@ export function Input(props) {
                             dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 
                             focus:outline-none focus:ring focus:ring-blue-300" 
                     type={props.type}
-                    value={props.value}
-                    disabled={props.disabled}/>
+                    defaultValue={props.value}
+                    disabled={props.disabled} 
+                    onChange={(x) => {props.setValue(x.target.value)}}/>
         </div>
     );
 }

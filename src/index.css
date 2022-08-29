@@ -17,6 +17,13 @@ code {
     monospace;
 }
 
+select {
+  /* for Firefox */
+  -moz-appearance: none;
+  /* for Chrome */
+  -webkit-appearance: none;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

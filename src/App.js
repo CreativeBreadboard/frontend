@@ -4,6 +4,7 @@ import { Navi } from './components/Nav.js';
 import { Home } from './views/Home.js'
 import { Upload } from './views/Upload';
 import { Check } from './views/Check.js'
+import { Result } from './views/Result.js';
 
 function App() {
   const list_menu = [{"title": "Home", "href": "#"}, {"title": "계산하기", "href": "#"}, {"title": "이전기록", "href": "#"}]
@@ -18,7 +19,8 @@ function App() {
         <Navi list_menu={list_menu} icon={icon}></Navi>
         {contents === "home" && <Home title={home_title} contents={home_contents} setContents={setContents}></Home>}
         {contents === "upload" && <Upload setContents={setContents}></Upload>}
-        {contents === "check" && <Check></Check>}
+        {contents === "check" && <Check setContents={setContents}></Check>}
+        {contents === "result" && <Result setContents={setContents}></Result>}
     </div>
   );
 }

@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import ImageMarker from 'react-image-marker';
+import { Input } from '../components/Input';
+import { Button } from '../components/Button';
+import Title from '../components/Title';
+import TitleBorder from '../components/TitleBorder';
 
 export function Upload(props) {
     var [markers, setMarkers] = useState([]);
@@ -19,16 +23,11 @@ export function Upload(props) {
             </div>
             
             <div class="w-full px-6 py-8 md:px-8 lg:w-1/2">
-                <h2 class="text-2xl font-semibold text-center text-gray-700 dark:text-white">업로드</h2>
-                <p class="text-xl text-center text-gray-600 dark:text-gray-200">아래의 정보를 입력해주세요. </p>
+                <Title title="업로드" description="아래의 정보를 입력해주세요. " />
 
-                <div class="flex items-center justify-between mt-4">
-                    <span class="w-1/5 border-b dark:border-gray-600 lg:w-1/4"></span>
+                <TitleBorder title="정보" />
 
-                    <a href="/" class="text-xs text-center text-gray-500 uppercase dark:text-gray-400 hover:underline">정보</a>
-
-                    <span class="w-1/5 border-b dark:border-gray-400 lg:w-1/4"></span>
-                </div>
+                <Input type="number"/>
 
                 <div class="mt-4">
                     <div class="flex justify-between">
@@ -61,27 +60,10 @@ export function Upload(props) {
                     </button>
                 </div>
 
-                <div class="mt-4">
-                    <div class="flex justify-between">
-                        <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="loggingPassword">전압</label>
-                        <a href="/" class="text-xs text-gray-500 dark:text-gray-300 hover:underline">V 단위로 입력해주세요. </a>
-                    </div>
+                <Input title="전압" description="V 단위로 입력해주세요. " type="number"/>
 
-                    <input id="loggingPassword" 
-                            class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 
-                                    dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" 
-                            type="number"/>
-                </div>
-
-                <div class="mt-8 place-self-end">
-                    <button class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform 
-                                bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
-                            onClick={x => props.setContents("check")}>
-                        다음
-                    </button>
-                </div>
+                <Button text="다음" onClick={x => props.setContents("check")}/>
             </div>
         </div>
-
     );
 }

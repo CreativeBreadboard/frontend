@@ -2,9 +2,14 @@ import React, { Component } from 'react'
 import Annotation from 'react-image-annotation'
 
 export default class Simple extends Component {
-  state = {
-    annotations: [],
-    annotation: {}
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      src_image: props.src_image,
+      annotations: [],
+      annotation: {}
+    }
   }
 
   onChange = (annotation) => {
@@ -29,7 +34,7 @@ export default class Simple extends Component {
   render () {
     return (
       <Annotation
-        src={"https://via.placeholder.com/330x600"}
+        src={this.props.src_image}
         alt='Two pebbles anthropomorphized holding hands'
 
         annotations={this.state.annotations}
