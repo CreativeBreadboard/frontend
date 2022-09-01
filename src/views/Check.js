@@ -7,8 +7,9 @@ import TitleBorder from '../components/TitleBorder';
 
 import { getListData, list2data } from '../util/util.js'
 
-function refreshData(URL, resultData, setResultData, setContents, list, ) {
-    const data = list2data(list);
+async function refreshData(URL, resultData, setResultData, setContents, list) {
+    const data = await list2data(list, resultData);
+    setTimeout(function(){
     console.log(data);
     var header = new Headers();
     header.append("Content-Type", "application/json");
@@ -22,17 +23,17 @@ function refreshData(URL, resultData, setResultData, setContents, list, ) {
     .then(x => x.json())
     .then(x => {
         console.log(x);
-        // setResultData({
-        //     basePoint: resultData.basePoint,
-        //     components: data,
-        //     scale: resultData.scale,
-        //     transformedImg: resultData.transformedImg,
-        //     voltage: resultData.voltage
-        // });
+        setResultData({
+            basePoint: resultData.basePoint,
+            components: data,
+            scale: resultData.scale,
+            transformedImg: resultData.transformedImg,
+            voltage: resultData.voltage
+        });
         setContents("result");
     })
     .catch(error => console.log('error', error));
-
+}, 3000);
 }
 
 function Edit(props) {

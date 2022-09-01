@@ -93,38 +93,63 @@ export function getListData(data) {
     return [list_data, list_annotation];
 }
 
-export function list2data(list_components) {
+export async function list2data(list_components, resultData) {
     var data = {};
     var list_resi = {};
     var list_line = {};
 
-    list_components.forEach(element => {
-        if(element.name.includes("R")) {
-            list_resi[element.name] = {
-            "name": element.name, 
-            "class": element.type,
-            "start": element.start_pin,
-            "end": element.end_pin,
-            "value": element.reg,
-            "start_coord": [0, 0],
-            "end_coord": [0, 0],
-            "areaStart": [0, 0],
-            "areaEnd": [0, 0]
-            };
-        }
-        else {
-            list_line[element.name] = {
-            "name": element.name, 
-            "class": element.type,
-            "start": element.start_pin,
-            "end": element.end_pin,
-            "start_coord": [0, 0],
-            "end_coord": [0, 0],
-            "areaStart": [0, 0],
-            "areaEnd": [0, 0]
-            };
-        }
-        
+    await list_components.forEach(async element => {
+        var cord_start = [];
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            redirect: 'follow'
+        };
+
+        fetch("http://pengpark.com:7080/pinmap?pin="+element.start_pin, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            cord_start = result;
+
+            if(element.name.includes("R")) {
+                fetch("http://pengpark.com:7080/pinmap?pin="+element.end_pin, requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    list_resi[element.name] = {
+                        "name": element.name, 
+                        "class": element.type,
+                        "start": element.start_pin,
+                        "end": element.end_pin,
+                        "value": element.reg,
+                        "start_coord": cord_start.coord,
+                        "end_coord": result.coord,
+                        "areaStart": resultData.components.Resistor[element.name].areaStart,
+                        "areaEnd": resultData.components.Resistor[element.name].areaEnd
+                    };
+                })
+                .catch(error => console.log('error', error));
+            }
+            else {
+                fetch("http://pengpark.com:7080/pinmap?pin="+element.end_pin, requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    list_line[element.name] = {
+                        "name": element.name, 
+                        "class": element.type,
+                        "start": element.start_pin,
+                        "end": element.end_pin,
+                        "start_coord": cord_start.coord,
+                        "end_coord": result.coord,
+                        "areaStart": resultData.components.Line[element.name].areaStart,
+                        "areaEnd": resultData.components.Line[element.name].areaEnd
+                    }
+                })
+                .catch(error => console.log('error', error));
+            }})
+            .catch(error => console.log('error', error));
     });
 
     data["Resistor"] = list_resi;
