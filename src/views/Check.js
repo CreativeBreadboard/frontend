@@ -5,7 +5,35 @@ import Simple from '../components/Simple';
 import Title from '../components/Title';
 import TitleBorder from '../components/TitleBorder';
 
-import {getListData} from '../util/util.js'
+import { getListData, list2data } from '../util/util.js'
+
+function refreshData(URL, resultData, setResultData, setContents, list, ) {
+    const data = list2data(list);
+    console.log(data);
+    var header = new Headers();
+    header.append("Content-Type", "application/json");
+
+    fetch(URL, {
+        method: "POST",
+        headers: header,
+        body: JSON.stringify(data),
+        redirect: 'follow'
+    })
+    .then(x => x.json())
+    .then(x => {
+        console.log(x);
+        // setResultData({
+        //     basePoint: resultData.basePoint,
+        //     components: data,
+        //     scale: resultData.scale,
+        //     transformedImg: resultData.transformedImg,
+        //     voltage: resultData.voltage
+        // });
+        setContents("result");
+    })
+    .catch(error => console.log('error', error));
+
+}
 
 function Edit(props) {
     var values = props.data[props.edit_index];
@@ -85,7 +113,7 @@ function List(props) {
                 </tbody>
             </table>
 
-            <Button text="다음" onClick={x => props.setContents("result")}/>
+            <Button text="다음" onClick={x => refreshData(props.BASE_URL + "network", props.resultData, props.setResultData, props.setContents, props.data)}/>
         </div>
     )
 }
@@ -104,7 +132,9 @@ export function Check(props) {
             <div class="hidden bg-cover lg:block lg:w-1/2">
                 <Simple src_image={circuit_img} markers={result_anno}/>
             </div>
-            {!isEdit && <List setIsEdit={setIsEdit} data={data} func_setEditIndex={setEditIndex} setContents={props.setContents}></List>}
+            {!isEdit && <List setIsEdit={setIsEdit} data={data} func_setEditIndex={setEditIndex} 
+                            setContents={props.setContents} BASE_URL={props.BASE_URL} resultData={props.resultData} 
+                            setResultData={props.setResultData}/>}
             {isEdit && <Edit setIsEdit={setIsEdit} data={data} edit_index={edit_index} func_setData={setData}></Edit>}
         </div>
     );

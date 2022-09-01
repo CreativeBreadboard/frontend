@@ -9,7 +9,7 @@ import { Result } from './views/Result.js';
 function App() {
   const BASE_URL = "http://pengpark.com:7080/";
 
-  const list_menu = [{"title": "Home", "href": "#"}, {"title": "계산하기", "href": "#"}, {"title": "이전기록", "href": "#"}]
+  const list_menu = [];
   const home_title = "복잡한 계산은 그만!";
   const home_contents = "C.B를 이용해서 복잡한 회로도 계산을 클릭 한번으로 끝내보세요!";
 

@@ -5,7 +5,7 @@ import Simple from '../components/Simple.js'
 import Title from '../components/Title.js'
 import TitleBorder from '../components/TitleBorder.js'
 
-import {getListData} from '../util/util.js'
+import { getListData } from '../util/util.js'
 
 function download(url) {
     var a = document.createElement('a');
@@ -54,9 +54,9 @@ function getResult(URL, func_setRTH, func_setCurrent, func_setVoltage) {
         func_setCurrent([x.circuit_analysis.node_current]);
 
         var list_voltage = [];
-        JSON.parse(x.circuit_analysis.node_voltage).forEach(element => {
-            if(element.length === 1) list_voltage.push(element);
-            else list_voltage.push(element.join(", "));
+        JSON.parse(x.circuit_analysis.node_voltage).map((element, index) => {
+            if(element.length === 1) list_voltage.push("#" + (index + 1) + " node " + element);
+            else list_voltage.push("#" + (index + 1) + " node " + element.join(", "));
         });
 
         func_setVoltage(list_voltage);
@@ -67,6 +67,7 @@ function getResult(URL, func_setRTH, func_setCurrent, func_setVoltage) {
 }
 
 export function Result(props) {
+    console.log(props.resultData);
     const [_, result_anno] = getListData(props.resultData);
     
     var img_circuit = "data:image/jpg;base64, " + props.resultData.transformedImg;

@@ -1,3 +1,32 @@
+function getPinPoint(pin, type, width, height) {
+    if(type === "start")
+        return ({
+            "data": {"text": pin.end, "id": Math.random()},
+            "geometry": {
+                "type": "POINT",
+
+                "x": pin.end_coord[0] / width * 100,
+                "y": pin.end_coord[1] / height * 100,
+
+                "width": 5,
+                "height": 5
+            }
+        });
+    else 
+        return ({
+            "data": {"text": pin.start, "id": Math.random()},
+            "geometry": {
+                "type": "POINT",
+
+                "x": pin.start_coord[0] / width * 100,
+                "y": pin.start_coord[1] / height * 100,
+
+                "width": 5,
+                "height": 5
+            }
+        });
+}
+
 export function getListData(data) {
     const components = data.components;
     var [width, height] = data.basePoint[2];
@@ -28,6 +57,9 @@ export function getListData(data) {
                 "height": (components.Line[key].areaEnd[1] - components.Line[key].areaStart[1]) / height * 100
             }
         });
+
+        list_annotation.push(getPinPoint(components.Line[key], "start", width, height));
+        list_annotation.push(getPinPoint(components.Line[key], "end", width, height));
     }
 
     for(key in components.Resistor) {
@@ -51,9 +83,53 @@ export function getListData(data) {
                 "height": (components.Resistor[key].areaEnd[1] - components.Resistor[key].areaStart[1]) / height * 100
             }
         });
+        
+        list_annotation.push(getPinPoint(components.Resistor[key], "start", width, height));
+        list_annotation.push(getPinPoint(components.Resistor[key], "end", width, height));
     }
 
     console.log(list_data, list_annotation);
 
     return [list_data, list_annotation];
+}
+
+export function list2data(list_components) {
+    var data = {};
+    var list_resi = {};
+    var list_line = {};
+
+    list_components.forEach(element => {
+        if(element.name.includes("R")) {
+            list_resi[element.name] = {
+            "name": element.name, 
+            "class": element.type,
+            "start": element.start_pin,
+            "end": element.end_pin,
+            "value": element.reg,
+            "start_coord": [0, 0],
+            "end_coord": [0, 0],
+            "areaStart": [0, 0],
+            "areaEnd": [0, 0]
+            };
+        }
+        else {
+            list_line[element.name] = {
+            "name": element.name, 
+            "class": element.type,
+            "start": element.start_pin,
+            "end": element.end_pin,
+            "start_coord": [0, 0],
+            "end_coord": [0, 0],
+            "areaStart": [0, 0],
+            "areaEnd": [0, 0]
+            };
+        }
+        
+    });
+
+    data["Resistor"] = list_resi;
+    data["Line"] = list_line;
+    data["Unknown"] = [];
+    
+    return data;
 }
