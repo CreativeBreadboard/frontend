@@ -27,7 +27,7 @@ function App() {
         {contents === "check" && 
             <Check setContents={setContents} setResultData={setResultData} resultData={resultData} BASE_URL={BASE_URL}/>}
         {contents === "result" && 
-            <Result setContents={setContents} setResultData={setResultData} resultData={resultData} BASE_URL={BASE_URL}/>}
+            <Result setContents={setContents} setResultData={setResultData} resultData={resultData} BASE_URL={BASE_URL} />}
     </div>
   );
 }
