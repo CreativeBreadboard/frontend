@@ -7,17 +7,17 @@ export default class Simple extends Component {
 
     this.state = {
       src_image: props.src_image,
-      annotations: [],
+      annotations: props.markers,
       annotation: {}
     }
   }
 
   onChange = (annotation) => {
-    this.setState({ annotation })
+    this.setState({ annotation });
   }
 
   onSubmit = (annotation) => {
-    const { geometry, data } = annotation
+    const { geometry, data } = annotation;
 
     this.setState({
       annotation: {},
@@ -28,7 +28,9 @@ export default class Simple extends Component {
           id: Math.random()
         }
       })
-    })
+    });
+
+    console.log(this.state.annotations);
   }
 
   render () {

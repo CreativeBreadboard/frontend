@@ -89,19 +89,82 @@ function List(props) {
     )
 }
 
+function getListData(data) {
+    const components = data.components;
+    var [width, height] = data.basePoint[2];
+    width += 200;
+    height += 200;
+
+    var list_data = [];
+    var list_annotation = [];
+
+    for(var key in components.Line) {
+        list_data.push({
+            "name": components.Line[key].name, 
+            "type": "Line", 
+            "start_pin": components.Line[key].start, 
+            "end_pin": components.Line[key].end, 
+            "reg": -1}
+        );
+
+        list_annotation.push({
+            "data": {"text": components.Line[key].name, "id": Math.random()},
+            "geometry": {
+                "type": "RECTANGLE",
+
+                "x": components.Line[key].areaStart[0] / width * 100,
+                "y": components.Line[key].areaStart[1] / height * 100,
+
+                "width": (components.Line[key].areaEnd[0] - components.Line[key].areaStart[0]) / width * 100,
+                "height": (components.Line[key].areaEnd[1] - components.Line[key].areaStart[1]) / height * 100
+            }
+        });
+    }
+
+    for(var key in components.Resistor) {
+        list_data.push({
+            "name": components.Resistor[key].name, 
+            "type": "Resistor", 
+            "start_pin": components.Resistor[key].start, 
+            "end_pin": components.Resistor[key].end, 
+            "reg": components.Resistor[key].value
+        });
+
+        list_annotation.push({
+            "data": {"text": components.Resistor[key].name, "id": Math.random()},
+            "geometry": {
+                "type": "RECTANGLE",
+
+                "x": components.Resistor[key].areaStart[0] / width * 100,
+                "y": components.Resistor[key].areaStart[1] / height * 100,
+
+                "width": (components.Resistor[key].areaEnd[0] - components.Resistor[key].areaStart[0]) / width * 100,
+                "height": (components.Resistor[key].areaEnd[1] - components.Resistor[key].areaStart[1]) / height * 100
+            }
+        });
+    }
+
+    console.log(list_data, list_annotation);
+
+    return [list_data, list_annotation];
+}
+
 export function Check(props) {
-    var [markers, setMarkers] = useState([]);
-    var [url_image, setImageURL] = useState("https://via.placeholder.com/330x600");
+    console.log(props.resultData);
+    const [result_data, result_anno] = getListData(props.resultData);
+    console.log(result_data, result_anno);
+
+    var [markers, setMarkers] = useState(result_anno);
+    var [circuit_img, setCircuitImage] = useState("data:image/jpg;base64, " + props.resultData.transformedImg);
     var [isEdit, setIsEdit] = useState(false);
-    var [data, setData] = useState([{"name": "L1", "type": "Line", "start_pin": "A2", "end_pin": "A4", "reg": -1},
-                                    {"name": "R1", "type": "Register", "start_pin": "B2", "end_pin": "B4", "reg": 320},]);
+    var [data, setData] = useState(result_data);
     var [edit_index, setEditIndex] = useState(-1);
-    var [annos, setAnnotations] = useState([])
+    var [annos, setAnnotations] = useState(result_anno);
 
     return (
         <div class="flex max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl m-5 w-full">
             <div class="hidden bg-cover lg:block lg:w-1/2">
-                <Simple src_image={url_image}></Simple>
+                <Simple src_image={circuit_img} markers={markers}/>
             </div>
             {!isEdit && <List setIsEdit={setIsEdit} data={data} func_setEditIndex={setEditIndex} setContents={props.setContents}></List>}
             {isEdit && <Edit setIsEdit={setIsEdit} data={data} edit_index={edit_index} func_setData={setData}></Edit>}

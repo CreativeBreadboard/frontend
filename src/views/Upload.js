@@ -5,7 +5,41 @@ import { Button } from '../components/Button';
 import Title from '../components/Title';
 import TitleBorder from '../components/TitleBorder';
 
+function markers2points(markers) {
+    var points = [];
+
+    markers.forEach(element => {
+        points.push([element.left, element.top]);
+    });
+
+    return points;
+}
+
+function uploadCircuitInfo(URL, file, volt, markers, setContents, setResultData) {
+    const points = markers2points(markers);
+    console.log(points);
+    const points_data = {"points": points, "scale": 2.5, "voltage": volt};
+    
+    var data = new FormData();
+    data.append("circuitImage", file);
+    data.append("points", JSON.stringify(points_data));
+
+    fetch(URL, {
+        method: "post",
+        body: data
+    }).then(x => 
+        x.json()
+    ).then(x => {
+        console.log(x);
+        setResultData(x);
+        setContents("check");
+    }).catch(error => 
+        console.log('error', error)
+    );
+}
+
 export function Upload(props) {
+    var [volt, setVolt] = useState(0);
     var [markers, setMarkers] = useState([]);
     var [url_image, setImageURL] = useState("https://via.placeholder.com/330x600");
 
@@ -26,8 +60,6 @@ export function Upload(props) {
                 <Title title="업로드" description="아래의 정보를 입력해주세요. " />
 
                 <TitleBorder title="정보" />
-
-                <Input type="number"/>
 
                 <div class="mt-4">
                     <div class="flex justify-between">
@@ -60,9 +92,12 @@ export function Upload(props) {
                     </button>
                 </div>
 
-                <Input title="전압" description="V 단위로 입력해주세요. " type="number"/>
+                <Input title="전압" description="V 단위로 입력해주세요. " type="number" setValue={setVolt}/>
 
-                <Button text="다음" onClick={x => props.setContents("check")}/>
+                <Button text="다음" onClick={x => {
+                        uploadCircuitInfo(props.BASE_URL + "image/1", document.getElementById("file").files[0], volt, markers, props.setContents, props.setResultData);
+                    }}
+                />
             </div>
         </div>
     );

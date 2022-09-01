@@ -5,8 +5,19 @@ import Simple from '../components/Simple.js'
 import Title from '../components/Title.js'
 import TitleBorder from '../components/TitleBorder.js'
 
+function getNodeList() {
+
+}
+
+function calcValue() {
+    return "0";
+}
+
 function Viewer(props) {
     var list = ["asd", "gfg", "sdfghksdf", 'ashkasd'];
+    var [calcValue, setCalcValue] = useState("40A");
+
+    // setCalcValue(calcValue());
 
     return (
         <div class="w-full px-6 py-8 md:px-8 lg:w-1/2">
@@ -23,6 +34,8 @@ function Viewer(props) {
                 <Dropdown list={list}></Dropdown>
             </div>
 
+            <Title title={calcValue} description="계산된 결과 입니다. " />
+
             <Button text="회로도 다운로드" onClick={x => props.setContents(false)}/>
             <Button text="확인" onClick={x => props.setContents(false)}/>
         </div>
@@ -30,7 +43,7 @@ function Viewer(props) {
 }
 
 export function Result(props) {
-    var [img_circuit, setCircuitImage] = useState("https://via.placeholder.com/330x600");
+    var [img_circuit, setCircuitImage] = useState(props.resultData.transformedImg);
     var [dia_circuit, setCircuitDiagram] = useState("https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/4_bit_counter.svg/640px-4_bit_counter.svg.png");
 
     return (
