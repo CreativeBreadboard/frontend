@@ -3,5 +3,6 @@
 빵판 얼굴. 
 
 # Run
-  npm install
-  npm run dev
+
+`npm install
+ npm run dev`
